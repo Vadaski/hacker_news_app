@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hacker_news_app/blocs/news_bloc_provider.dart';
-import '../models/item_model.dart';
+import '../blocs/news_bloc_provider.dart';
+import '../widgets/item_tile.dart';
 
 class NewsListScreen extends StatelessWidget {
   @override
@@ -13,7 +12,10 @@ class NewsListScreen extends StatelessWidget {
         title: Text('Top News'),
         centerTitle: true,
       ),
-      body: refreshWidget(_buildList(bloc), bloc),
+      body: refreshWidget(
+        _buildList(bloc),
+        bloc,
+      ),
     );
   }
 
@@ -58,64 +60,5 @@ class NewsListScreen extends StatelessWidget {
           await bloc.clearCache();
           await bloc.fetchTopIds();
         });
-  }
-}
-
-class ItemTile extends StatelessWidget {
-  final int id;
-  ItemTile(this.id);
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = NewsBlocProvider.of(context);
-    bloc.fetchItems(id);
-    return StreamBuilder(
-      stream: bloc.items,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) {
-        if (!snapshot.hasData) {
-          return _defaultNewsContainer();
-        }
-        return FutureBuilder(
-          future: snapshot.data[id],
-          builder:
-              (BuildContext context, AsyncSnapshot<ItemModel> itemSnapshot) {
-            if (!itemSnapshot.hasData) {
-              return _defaultNewsContainer();
-            }
-            return ListTile(
-              title: Text('${itemSnapshot.data.title}'),
-              subtitle: Text('${itemSnapshot.data.score} scores'),
-              trailing: Column(
-                children: <Widget>[
-                  Icon(Icons.chat),
-                  Text('${itemSnapshot.data.descendants}')
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _defaultNewsContainer() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        title: Container(
-          height: 24,
-          color: Colors.grey.shade200,
-        ),
-        subtitle: Align(
-          alignment: Alignment.centerLeft,
-          child: Container(
-            width: 40,
-            height: 24,
-            color: Colors.grey.shade200,
-          ),
-        ),
-      ),
-    );
   }
 }

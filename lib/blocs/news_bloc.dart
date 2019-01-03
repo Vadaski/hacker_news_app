@@ -4,14 +4,15 @@ import '../resources/repository.dart';
 import '../models/item_model.dart';
 
 class NewsBloc {
-  final _topIds = PublishSubject<List<int>>();
-  final _itemsFetcher =  PublishSubject<int>();
-  final _itemOutput = BehaviorSubject<Map<int, Future<ItemModel>>>();
-  final _repository = NewsRepository();
 
   NewsBloc() {
     _itemsFetcher.transform(_itemTransformer()).pipe(_itemOutput);
   }
+
+  final _topIds = PublishSubject<List<int>>();
+  final _itemsFetcher =  PublishSubject<int>();
+  final _itemOutput = BehaviorSubject<Map<int, Future<ItemModel>>>();
+  final _repository = NewsRepository();
 
   Observable<Map<int, Future<ItemModel>>> get items => _itemOutput.stream;
   Observable<List<int>> get topIds => _topIds.stream;

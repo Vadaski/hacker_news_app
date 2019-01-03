@@ -19,6 +19,8 @@ class NewsRepository{
   Future<ItemModel> fetchItem(int id) async{
     ItemModel item;
     var source;
+
+    //从source中获得item，先检查数据库，若未查到则请求网络
     for(source in _sourceList){
       item = await source.fetchItem(id);
       if(item != null) break;

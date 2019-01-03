@@ -19,9 +19,12 @@ class NewsDbProvider implements Source, Cache {
   init() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "items.db");
-    _db = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) {
-      db.execute('''
+
+    _db = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int version) {
+        db.execute('''
             CREATE TABLE $_tableName(
               id INTEGER PRIMARY KEY,
               type TEXT,
@@ -38,9 +41,11 @@ class NewsDbProvider implements Source, Cache {
               descendants INTEGER
             )
           ''');
-    });
+      },
+    );
   }
 
+  //查询新闻
   Future<ItemModel> fetchItem(int id) async {
     final itemMap = await _db.query(
       "$_tableName",
@@ -57,17 +62,15 @@ class NewsDbProvider implements Source, Cache {
   }
 
   //ConflictAlgorithm.ignore：当有重复的值被写入时忽略
-  Future<int> addItem(ItemModel item) => _db.insert(
-        _tableName,
-        item.toDbMap(),
-        conflictAlgorithm: ConflictAlgorithm.ignore
-      );
+  Future<int> addItem(ItemModel item) => _db.insert(_tableName, item.toDbMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore);
 
-  //unused method
+  //unused method ignore it
   @override
   Future<List<int>> fetchTopIds() => null;
 
-  Future<int> clear(){
+  //清理数据库
+  Future<int> clear() {
     return _db.delete("$_tableName");
   }
 }
