@@ -5,11 +5,12 @@ import '../widgets/item_tile.dart';
 class NewsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print("build");
     final bloc = NewsBlocProvider.of(context);
     bloc.fetchTopIds();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top News'),
+        title: Text('Hacker News App'),
         centerTitle: true,
       ),
       body: refreshWidget(

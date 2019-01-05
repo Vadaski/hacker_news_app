@@ -49,49 +49,55 @@ class _ItemTileState extends State<ItemTile>
           builder:
               (BuildContext context, AsyncSnapshot<ItemModel> itemSnapshot) {
             if (!itemSnapshot.hasData) return _defaultNewsContainer();
+            ;
+            final secondChild = _buildItemTile(context, itemSnapshot);
             return AnimatedOpacity(
               opacity: _animationOpacity,
-              duration: Duration(seconds: 1),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(
-                      '${itemSnapshot.data.title}',
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text('${itemSnapshot.data.score} scores'),
-                    ),
-                    trailing: Column(
-                      children: <Widget>[
-                        Icon(Icons.chat),
-                        Text(
-                          '${itemSnapshot.data.descendants}',
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                      CommentsBlocProvider.of(context)
-                          .fetchItemWithComments(widget.id);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => NewsDetailScreen(
-                                id: widget.id,
-                              )));
-                    },
-                    onLongPress: () {
-                      _launchInBrowser(itemSnapshot.data.url);
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                    child: Divider(),
-                  ),
-                ],
-              ),
+              duration: Duration(milliseconds: 500),
+              child: secondChild,
             );
           },
         );
       },
+    );
+  }
+
+  Widget _buildItemTile(
+      BuildContext context, AsyncSnapshot<ItemModel> itemSnapshot) {
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text(
+            '${itemSnapshot.data.title}',
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text('${itemSnapshot.data.score} scores'),
+          ),
+          trailing: Column(
+            children: <Widget>[
+              Icon(Icons.chat),
+              Text(
+                '${itemSnapshot.data.descendants}',
+              )
+            ],
+          ),
+          onTap: () {
+            CommentsBlocProvider.of(context).fetchItemWithComments(widget.id);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NewsDetailScreen(
+                      id: widget.id,
+                    )));
+          },
+          onLongPress: () {
+            _launchInBrowser(itemSnapshot.data.url);
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          child: Divider(),
+        ),
+      ],
     );
   }
 
@@ -123,6 +129,7 @@ class _ItemTileState extends State<ItemTile>
     );
   }
 
+  //缓存futureItem
   Future<ItemModel> _futureItem(
           AsyncSnapshot<Map<int, Future<ItemModel>>> snapshot) =>
       _asyncMemoize.runOnce(() async {
@@ -130,6 +137,7 @@ class _ItemTileState extends State<ItemTile>
         return futureModel;
       });
 
+  //打开webview
   Future<Null> _launchInWebViewOrVC(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: true, forceWebView: true);
@@ -138,6 +146,7 @@ class _ItemTileState extends State<ItemTile>
     }
   }
 
+  //打开浏览器
   Future<Null> _launchInBrowser(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false, forceWebView: false);

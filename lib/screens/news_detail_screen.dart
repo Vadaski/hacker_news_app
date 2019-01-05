@@ -40,8 +40,29 @@ class NewsDetailScreen extends StatelessWidget {
   Widget _buildListBody(BuildContext context, ItemModel item,
       Map<int, Future<ItemModel>> itemMap) {
     List children = List<Widget>();
-    children.add(_buildTitle(context, item));
-    final commentsList = item.kids.map((kid) => Comment(id, itemMap)).toList();
+
+    children
+      ..add(_buildTitle(context, item))
+      ..add(SizedBox(
+        height: 12,
+      ))
+    ..add(Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Text('COMMENTS',style: Theme.of(context).primaryTextTheme.display4.copyWith(fontSize: 24),),
+    ),
+    )..add(SizedBox(height: 12,));
+
+    if (item.kids.length == 0) {
+      children.add(SizedBox(
+        height: 300,
+      ));
+      children.add(_buildNoCommentPageBody(context));
+      return ListView(children: children);
+    }
+    item.kids.forEach((kid) async {
+      ItemModel item = await itemMap[kid];
+    });
+    final commentsList = item.kids.map((kid) => Comment(kid, itemMap)).toList();
     children.addAll(commentsList);
     return ListView(children: children);
   }
@@ -58,5 +79,16 @@ class NewsDetailScreen extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
     );
+  }
+
+  Widget _buildNoCommentPageBody(BuildContext context) {
+    return Center(
+        child: Text(
+      "There has been no comment on the news",
+      style: Theme.of(context)
+          .primaryTextTheme
+          .display4
+          .copyWith(fontSize: 20, color: Colors.white),
+    ));
   }
 }
