@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/item_model.dart';
+import '../utils/text_helper.dart';
 
 class Comment extends StatelessWidget {
   final int id;
@@ -17,15 +18,18 @@ class Comment extends StatelessWidget {
           );
         }
         final item = snapshot.data;
-        final time = DateTime.fromMicrosecondsSinceEpoch(item.time);
+        final text = textConverter(item.text);
         final children = <Widget>[
           ListTile(
-              title: item.text == null ? Container() : Text(item.text),
+              title: item.text == null ? Container() : Text(text),
               subtitle: item.by == null
                   ? Text("the comments already deleted")
                   : Padding(
                       padding: EdgeInsets.only(top: 8),
-                      child: Align(alignment: Alignment.bottomRight,child: Text("by: ${item.by}"),),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text("by: ${item.by}"),
+                      ),
                     )),
           Divider(),
         ];
