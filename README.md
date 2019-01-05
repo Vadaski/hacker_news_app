@@ -1,6 +1,13 @@
 # hacker_news_app
 ## 简介
-来自于Stephen Grider的hacker news app，使用了bloc作为状态管理。请安装在真机上并打开科学上网工具才能正确访问hacker news api
+来自于Stephen Grider的hacker news app，你可以在这里看到这些：
+- BLoC + Rxdart状态管理
+- 数据懒加载
+- 基本的动画
+- 数据持久化
+- 打开浏览器
+
+这个应用足够简单且很有参考意义，请安装在真机上并打开科学上网工具才能正确访问hacker news api
 
 HackerNewsApi:https://github.com/HackerNews/API
 ## 样例
