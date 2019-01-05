@@ -46,11 +46,22 @@ class NewsDetailScreen extends StatelessWidget {
       ..add(SizedBox(
         height: 12,
       ))
-    ..add(Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: Text('COMMENTS',style: Theme.of(context).primaryTextTheme.display4.copyWith(fontSize: 24),),
-    ),
-    )..add(SizedBox(height: 12,));
+      ..add(
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(
+            'COMMENTS',
+            style: Theme.of(context)
+                .primaryTextTheme
+                .display1
+                .copyWith(fontSize: 24),
+          ),
+        ),
+      )
+      ..add(SizedBox(
+        height: 12,
+      ))
+      ..add(Divider());
 
     if (item.kids.length == 0) {
       children.add(SizedBox(

@@ -19,17 +19,22 @@ class Comment extends StatelessWidget {
         }
         final item = snapshot.data;
         final text = textConverter(item.text);
+        final time = DateTime.fromMillisecondsSinceEpoch(item.time*1000);
         final children = <Widget>[
           ListTile(
+            contentPadding: EdgeInsets.all(0),
               title: item.text == null ? Container() : Text(text),
               subtitle: item.by == null
                   ? Text("the comments already deleted")
                   : Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text("by: ${item.by}"),
-                      ),
+                      padding: EdgeInsets.only(top: 8,right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('${item.by}'),
+                          Text(time.toIso8601String().substring(5,10)),
+                        ],
+                      )
                     )),
           Divider(),
         ];

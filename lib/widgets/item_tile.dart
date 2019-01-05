@@ -69,6 +69,7 @@ class _ItemTileState extends State<ItemTile>
         ListTile(
           title: Text(
             '${itemSnapshot.data.title}',
+//            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8),
